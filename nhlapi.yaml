@@ -1,0 +1,242 @@
+---
+swagger: "2.0"
+info:
+  description: The puck luck api is an open api returning NHL data relating to shot quality and expected statistics. It is open to the public and will be used for thepuckluck.com as the main data source. See more at https://github.com/kylealexlane/nhlapi
+  version: 1.0.0
+  title: PuckLuck Api
+  contact:
+    email: thepuckluckemail@gmail.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+host: www.api.thepuckluck.com
+basePath: /api/v1
+tags:
+- name: players
+  description: access to player shooting statistics
+- name: goalie
+  description: access to goalie save statistics
+  externalDocs:
+    description: Documentation being added soon
+    url: github.com/kylealexlane/nhlapi
+- name: team
+  description: access to team statistics
+  externalDocs:
+    description: Documentation being added soon
+    url: github.com/kylealexlane/nhlapi
+schemes:
+- http
+paths:
+  /players:
+    get:
+      tags:
+      - players
+      summary: Return list of players with statistics
+      description: Lots of optional parameters to filter which players returned, read below for details. Must provide season and gametype to prevent huge lists being return
+      operationId: getplayers
+      parameters:
+      - name: season
+        in: query
+        description: Season to return stats for, eg. 20182019
+        required: true
+        type: string
+        items:
+          type: integer
+        collectionFormat: multi
+      - name: gametype
+        in: query
+        description: Game type - either R for regular season or P for playoffs
+        required: true
+        type: string
+        items:
+          type: string
+          default: R
+          enum:
+          - R
+          - P
+        collectionFormat: multi
+      - name: month
+        in: query
+        description: month - either 'year' for yearly or numeric month
+        required: false
+        type: string
+        items:
+          type: string
+          enum:
+          - year
+          - "1"
+          - "2"
+          - "3"
+          - "4"
+          - "5"
+          - "6"
+          - "7"
+          - "8"
+          - "9"
+          - "10"
+          - "11"
+          - "12"
+        collectionFormat: multi
+      - name: pos
+        in: query
+        description: position of player
+        required: false
+        type: string
+        items:
+          type: string
+          enum:
+          - C
+          - R
+          - L
+          - D
+        collectionFormat: multi
+      - name: depth
+        in: query
+        description: depth of response - more options being added later
+        required: false
+        type: string
+        items:
+          type: string
+          enum:
+          - allsummaries
+          - basicranks
+        collectionFormat: multi
+      - name: team
+        in: query
+        description: team id - will filter for only players on that team
+        required: false
+        type: string
+        items:
+          type: integer
+        collectionFormat: multi
+      - name: returntype
+        in: query
+        description: how the data is returned
+        required: false
+        type: string
+        items:
+          type: string
+          default: sorted
+          enum:
+          - list
+          - sorted
+        collectionFormat: multi
+      responses:
+        200:
+          description: successful operation
+        400:
+          description: Invalid
+  /players/{playerid}:
+    get:
+      tags:
+      - players
+      summary: Return player info by ID
+      description: Returns a single player's info
+      operationId: getPlayerInfo
+      produces:
+      - application/xml
+      - application/json
+      parameters:
+      - name: playerid
+        in: path
+        description: ID of player to return
+        required: true
+        type: integer
+        format: int64
+      - name: season
+        in: query
+        description: Season to return stats for, eg. 20182019
+        required: false
+        type: string
+        items:
+          type: integer
+        collectionFormat: multi
+      - name: gametype
+        in: query
+        description: Game type - either R for regular season or P for playoffs
+        required: false
+        type: string
+        items:
+          type: string
+          default: R
+          enum:
+          - R
+          - P
+        collectionFormat: multi
+      - name: month
+        in: query
+        description: month - either 'year' for yearly or numeric month
+        required: false
+        type: string
+        items:
+          type: string
+          enum:
+          - year
+          - "1"
+          - "2"
+          - "3"
+          - "4"
+          - "5"
+          - "6"
+          - "7"
+          - "8"
+          - "9"
+          - "10"
+          - "11"
+          - "12"
+        collectionFormat: multi
+      - name: pos
+        in: query
+        description: position of player
+        required: false
+        type: string
+        items:
+          type: string
+          enum:
+          - C
+          - R
+          - L
+          - D
+        collectionFormat: multi
+      - name: depth
+        in: query
+        description: depth of response - more options being added later
+        required: false
+        type: string
+        items:
+          type: string
+          enum:
+          - allsummaries
+          - basicranks
+        collectionFormat: multi
+      - name: team
+        in: query
+        description: team id - will filter for only players on that team
+        required: false
+        type: string
+        items:
+          type: integer
+        collectionFormat: multi
+      - name: returntype
+        in: query
+        description: how the data is returned
+        required: false
+        type: string
+        items:
+          type: string
+          default: sorted
+          enum:
+          - list
+          - sorted
+        collectionFormat: multi
+      responses:
+        200:
+          description: successful operation
+        400:
+          description: Invalid ID supplied
+        404:
+          description: Player not found
+definitions: {}
+externalDocs:
+  description: Find out more about the api
+  url: https://github.com/kylealexlane/nhlapi
