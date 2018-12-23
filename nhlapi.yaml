@@ -14,16 +14,10 @@ basePath: /api/v1
 tags:
 - name: players
   description: access to player shooting statistics
-- name: goalie
+- name: goalies
   description: access to goalie save statistics
-  externalDocs:
-    description: Documentation being added soon
-    url: github.com/kylealexlane/nhlapi
-- name: team
+- name: teams
   description: access to team statistics
-  externalDocs:
-    description: Documentation being added soon
-    url: github.com/kylealexlane/nhlapi
 schemes:
 - http
 paths:
@@ -32,7 +26,7 @@ paths:
       tags:
       - players
       summary: Return list of players with statistics
-      description: Lots of optional parameters to filter which players returned, read below for details. Must provide season and gametype to prevent huge lists being return
+      description: Lots of optional parameters to filter which players returned, read below for details. Must provide season and gametype.
       operationId: getplayers
       parameters:
       - name: season
@@ -108,6 +102,170 @@ paths:
         type: string
         items:
           type: integer
+        collectionFormat: multi
+      - name: returntype
+        in: query
+        description: how the data is returned
+        required: false
+        type: string
+        items:
+          type: string
+          default: sorted
+          enum:
+          - list
+          - sorted
+        collectionFormat: multi
+      responses:
+        200:
+          description: successful operation
+        400:
+          description: Invalid
+  /goalies:
+    get:
+      tags:
+      - goalies
+      summary: Return list of goalies with statistics
+      description: Lots of optional parameters to filter which goalies are returned, read below for details. Must provide season and gametype.
+      operationId: getgoalies
+      parameters:
+      - name: season
+        in: query
+        description: Season to return stats for, eg. 20182019
+        required: true
+        type: string
+        items:
+          type: integer
+        collectionFormat: multi
+      - name: gametype
+        in: query
+        description: Game type - either R for regular season or P for playoffs
+        required: true
+        type: string
+        items:
+          type: string
+          default: R
+          enum:
+          - R
+          - P
+        collectionFormat: multi
+      - name: month
+        in: query
+        description: month - either 'year' for yearly or numeric month
+        required: false
+        type: string
+        items:
+          type: string
+          enum:
+          - year
+          - "1"
+          - "2"
+          - "3"
+          - "4"
+          - "5"
+          - "6"
+          - "7"
+          - "8"
+          - "9"
+          - "10"
+          - "11"
+          - "12"
+        collectionFormat: multi
+      - name: depth
+        in: query
+        description: depth of response - more options being added later
+        required: false
+        type: string
+        items:
+          type: string
+          enum:
+          - allsummaries
+          - basicranks
+        collectionFormat: multi
+      - name: team
+        in: query
+        description: team id - will filter for only players on that team
+        required: false
+        type: string
+        items:
+          type: integer
+        collectionFormat: multi
+      - name: returntype
+        in: query
+        description: how the data is returned
+        required: false
+        type: string
+        items:
+          type: string
+          default: sorted
+          enum:
+          - list
+          - sorted
+        collectionFormat: multi
+      responses:
+        200:
+          description: successful operation
+        400:
+          description: Invalid
+  /teams:
+    get:
+      tags:
+      - teams
+      summary: Return list of teams with statistics
+      description: Lots of optional parameters to filter which players returned, read below for details. Must provide season and gametype.
+      operationId: getteams
+      parameters:
+      - name: season
+        in: query
+        description: Season to return stats for, eg. 20182019
+        required: true
+        type: string
+        items:
+          type: integer
+        collectionFormat: multi
+      - name: gametype
+        in: query
+        description: Game type - either R for regular season or P for playoffs
+        required: true
+        type: string
+        items:
+          type: string
+          default: R
+          enum:
+          - R
+          - P
+        collectionFormat: multi
+      - name: month
+        in: query
+        description: month - either 'year' for yearly or numeric month
+        required: false
+        type: string
+        items:
+          type: string
+          enum:
+          - year
+          - "1"
+          - "2"
+          - "3"
+          - "4"
+          - "5"
+          - "6"
+          - "7"
+          - "8"
+          - "9"
+          - "10"
+          - "11"
+          - "12"
+        collectionFormat: multi
+      - name: depth
+        in: query
+        description: depth of response - more options being added later
+        required: false
+        type: string
+        items:
+          type: string
+          enum:
+          - allsummaries
+          - basicranks
         collectionFormat: multi
       - name: returntype
         in: query
@@ -236,6 +394,192 @@ paths:
           description: Invalid ID supplied
         404:
           description: Player not found
+  /goalies/{goalieid}:
+    get:
+      tags:
+      - goalies
+      summary: Return goalie info by ID
+      description: Returns a single goalie's info
+      operationId: getGoalieInfo
+      produces:
+      - application/xml
+      - application/json
+      parameters:
+      - name: goalieid
+        in: path
+        description: ID of goalie to return
+        required: true
+        type: integer
+        format: int64
+      - name: season
+        in: query
+        description: Season to return stats for, eg. 20182019
+        required: false
+        type: string
+        items:
+          type: integer
+        collectionFormat: multi
+      - name: gametype
+        in: query
+        description: Game type - either R for regular season or P for playoffs
+        required: false
+        type: string
+        items:
+          type: string
+          default: R
+          enum:
+          - R
+          - P
+        collectionFormat: multi
+      - name: month
+        in: query
+        description: month - either 'year' for yearly or numeric month
+        required: false
+        type: string
+        items:
+          type: string
+          enum:
+          - year
+          - "1"
+          - "2"
+          - "3"
+          - "4"
+          - "5"
+          - "6"
+          - "7"
+          - "8"
+          - "9"
+          - "10"
+          - "11"
+          - "12"
+        collectionFormat: multi
+      - name: depth
+        in: query
+        description: depth of response - more options being added later
+        required: false
+        type: string
+        items:
+          type: string
+          enum:
+          - allsummaries
+          - basicranks
+        collectionFormat: multi
+      - name: team
+        in: query
+        description: team id - will filter for only goalie on that team
+        required: false
+        type: string
+        items:
+          type: integer
+        collectionFormat: multi
+      - name: returntype
+        in: query
+        description: how the data is returned
+        required: false
+        type: string
+        items:
+          type: string
+          default: sorted
+          enum:
+          - list
+          - sorted
+        collectionFormat: multi
+      responses:
+        200:
+          description: successful operation
+        400:
+          description: Invalid ID supplied
+        404:
+          description: Goalie not found
+  /teams/{teamid}:
+    get:
+      tags:
+      - teams
+      summary: Return team info by ID
+      description: Returns a single team's info
+      operationId: getTeamInfo
+      produces:
+      - application/xml
+      - application/json
+      parameters:
+      - name: teamid
+        in: path
+        description: ID of team to return
+        required: true
+        type: integer
+        format: int64
+      - name: season
+        in: query
+        description: Season to return stats for, eg. 20182019
+        required: false
+        type: string
+        items:
+          type: integer
+        collectionFormat: multi
+      - name: gametype
+        in: query
+        description: Game type - either R for regular season or P for playoffs
+        required: false
+        type: string
+        items:
+          type: string
+          default: R
+          enum:
+          - R
+          - P
+        collectionFormat: multi
+      - name: month
+        in: query
+        description: month - either 'year' for yearly or numeric month
+        required: false
+        type: string
+        items:
+          type: string
+          enum:
+          - year
+          - "1"
+          - "2"
+          - "3"
+          - "4"
+          - "5"
+          - "6"
+          - "7"
+          - "8"
+          - "9"
+          - "10"
+          - "11"
+          - "12"
+        collectionFormat: multi
+      - name: depth
+        in: query
+        description: depth of response - more options being added later
+        required: false
+        type: string
+        items:
+          type: string
+          enum:
+          - allsummaries
+          - basicranks
+        collectionFormat: multi
+      - name: returntype
+        in: query
+        description: how the data is returned
+        required: false
+        type: string
+        items:
+          type: string
+          default: sorted
+          enum:
+          - list
+          - sorted
+        collectionFormat: multi
+      responses:
+        200:
+          description: successful operation
+        400:
+          description: Invalid ID supplied
+        404:
+          description: Team not found
 definitions: {}
 externalDocs:
   description: Find out more about the api
