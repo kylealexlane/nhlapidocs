@@ -1,4 +1,4 @@
-# Documentation for the Puckluck RESTful Open API http://docs.thepuckluck.com
+# Documentation for the Puckluck RESTful Open API
 
 ## http://docs.thepuckluck.com
 
